@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<!DOCTYPE moduleset SYSTEM "moduleset.dtd">
+<?xml-stylesheet type="text/xsl" href="moduleset.xsl"?>
+<moduleset>
+    <repository type="tarball" name="sourceforge"
+        href="http://downloads.sourceforge.net/sourceforge/"/>
+    <repository type="git" name="github.com"
+        href="git://github.com/"/>
+
+    <metamodule id="deluge">
+        <dependencies>
+            <dep package="libtorrent"/>
+            <dep package="gtk-mac-bundler"/>
+            <dep package="deluge-python-deps"/>
+        </dependencies>
+    </metamodule>
+
+    <repository type="tarball" name="libtorrent"
+        href="http://libtorrent.googlecode.com/files/"/>
+    <autotools id="libtorrent" autogen-sh="configure"
+        autogen-template="%(srcdir)s/%(autogen-sh)s --prefix=%(prefix)s --with-boost-libdir=%(libdir)s --with-openssl=%(prefix)s %(autogenargs)s"
+        autogenargs="--enable-python-binding CPPFLAGS='-DBOOST_FILESYSTEM_VERSION=2'">
+        <branch repo="libtorrent" version="0.15.8"
+            module="libtorrent-rasterbar-0.15.8.tar.gz"
+            hash="sha1:9e21ebfa6fba19b237754a10ae9b8007781c48f0"/>
+        <dependencies>
+            <dep package="openssl"/>
+            <dep package="boost"/>
+        </dependencies>
+    </autotools>
+
+    <repository type="tarball" name="openssl"
+        href="http://www.openssl.org/source/"/>
+    <autotools id="openssl" autogen-sh="Configure"
+        autogen-template="%(srcdir)s/%(autogen-sh)s --prefix=%(prefix)s -L%(libdir)s --openssldir=%(prefix)s/etc/openssl %(autogenargs)s"
+        autogenargs="darwin64-x86_64-cc zlib no-asm no-krb5 shared">
+        <branch repo="openssl" version="1.0.0e"
+            module="openssl-1.0.0e.tar.gz"
+            md5sum="7040b89c4c58c7a1016c0dfa6e821c86"/>
+    </autotools>
+
+    <!-- Ugly workaround to call b2 instead of make -->
+    <metamodule id="boost">
+        <dependencies>
+            <!-- TODO <dep package="icu"/>-->
+            <dep package="boost-conf"/>
+            <dep package="boost-install"/>
+        </dependencies>
+    </metamodule>
+    <autotools id="boost-conf" autogen-sh="bootstrap.sh"
+        autogen-template="%(srcdir)s/%(autogen-sh)s --prefix=%(prefix)s --libdir=%(prefix)s --with-python=%(prefix)s/bin/python --with-icu=%(prefix)s --without-libraries=mpi %(autogenargs)s"
+        autogenargs="&amp;&amp; echo 'all:' &gt; makefile">
+        <branch repo="sourceforge"
+            module="boost/boost_1_47_0.tar.bz2" version="1.47"
+            md5sum="a2dc343f7bc7f83f8941e47ed4a18200"/>
+    </autotools>
+    <autotools id="boost-install" autogen-sh="b2 install"
+        autogen-template="%(srcdir)s/%(autogen-sh)s --prefix=%(prefix)s --libdir=%(libdir)s %(autogenargs)s">
+        <branch repo="sourceforge"
+            module="boost/boost_1_47_0.tar.bz2" version="1.47"
+            md5sum="a2dc343f7bc7f83f8941e47ed4a18200"/>
+    </autotools>
+
+    <autotools id="gtk-mac-bundler" autogen-template="echo no configure">
+        <branch repo="github.com" module="jralls/gtk-mac-bundler.git"/>
+    </autotools>
+
+    <metamodule id="deluge-python-deps">
+        <dependencies>
+            <dep package="setuptools"/>
+            <dep package="chardet"/>
+            <dep package="twisted"/>
+            <dep package="pyopenssl"/>
+            <dep package="pyxdg"/>
+            <dep package="py2app"/>
+        </dependencies>
+    </metamodule>
+    <repository type="tarball" name="pypi"
+        href="http://pypi.python.org/packages/source/"/>
+    <distutils id="setuptools">
+        <branch repo="pypi" version="1.0.0e"
+            module="s/setuptools/setuptools-0.6c11.tar.gz"/>
+    </distutils>
+    <distutils id="chardet">
+        <branch repo="pypi" version="1.0.1"
+            module="c/chardet/chardet-1.0.1.tar.gz"/>
+    </distutils>
+    <distutils id="twisted">
+        <branch repo="pypi" version="11.0.0"
+            module="T/Twisted/Twisted-11.0.0.tar.bz2"/>
+    </distutils>
+    <distutils id="pyopenssl">
+        <branch repo="pypi" version="0.13"
+            module="p/pyOpenSSL/pyOpenSSL-0.13.tar.gz"/>
+    </distutils>
+    <distutils id="pyxdg">
+        <branch repo="pypi" version="0.19"
+            module="p/pyxdg/pyxdg-0.19.tar.gz"/>
+    </distutils>
+    <distutils id="py2app">
+        <branch repo="pypi" version="0.6.3"
+            module="p/py2app/py2app-0.6.3.tar.gz"/>
+    </distutils>
+
+</moduleset>
+

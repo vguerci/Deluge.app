@@ -515,6 +515,28 @@ entry_points = {
 if windows_check():
     entry_points["console_scripts"].append("deluge-debug = deluge.main:start_ui")
 
+#py2app
+extra_options = {}
+if osx_check():
+    import py2app
+    assert py2app is not None
+    extra_options = dict(
+        app = ['deluge/main.py'], #TODO useless but required (=unecessary file)
+        options = {
+            'py2app': {
+                'iconfile': 'osx/deluge.icns',
+                'site_packages': False,
+                #'argv_emulation': True, #TODO not supported on x86_64
+                #'strip': False,
+                'includes': [
+                    'glib', 'gio', 'cairo', 'pango', 'pangocairo', 'atk', 'gobject', 'gtk.keysyms',
+                    'libtorrent',
+                    'twisted.internet', 'twisted.protocols', 'zope.interface',
+                ],
+                'frameworks': ['CoreFoundation', 'Foundation', 'AppKit'],
+        }}
+    )
+
 # Main setup
 setup(
     name = "deluge",
@@ -561,5 +583,6 @@ setup(
                                 "ui/web/themes/images/*/*/*.png"
                                 ]},
     packages = find_packages(exclude=["plugins", "docs", "tests"]),
-    entry_points = entry_points
+    entry_points = entry_points, **extra_options
 )
+
