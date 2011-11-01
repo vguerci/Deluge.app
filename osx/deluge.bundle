@@ -30,4 +30,5 @@
   <binary>${prefix}/lib/gtk-2.0/2.10.0/engines/libclearlooks.so</binary>
   <data dest="${bundle}/Contents/Resources/etc/gtk-2.0/gtkrc">${project}/gtkrc</data>
   <data dest="${bundle}/Contents/Resources">${project}/deluge.icns</data>
+  <data dest="${bundle}/Contents/Resources">${project}/torrent.icns</data>
 </app-bundle>

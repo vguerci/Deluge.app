@@ -228,6 +228,10 @@ class GtkUI(object):
         self.statusbar = StatusBar()
         self.addtorrentdialog = AddTorrentDialog()
 
+        if deluge.common.osx_check():
+            from osx import OSX
+            self.osx = OSX(self)
+
         # Initalize the plugins
         self.plugins = PluginManager()
 

@@ -32,7 +32,7 @@
 	<string>0</string>
 	<key>CFBundleDisplayName</key>
 	<string>Deluge</string>
-	<!-- TODO key>CFBundleDocumentTypes</key>
+	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleTypeExtensions</key>
@@ -40,7 +40,7 @@
 				<string>torrent</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>DelugeDocument</string>
+			<string>torrent</string>
 			<key>CFBundleTypeName</key>
 			<string>BitTorrent Document</string>
 			<key>CFBundleTypeRole</key>
@@ -52,6 +52,6 @@
 				<string>org.bittorrent.torrent</string>
 			</array>
 		</dict>
-	</array-->
+	</array>
 </dict>
 </plist>
