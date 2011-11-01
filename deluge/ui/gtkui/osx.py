@@ -37,6 +37,7 @@ from deluge.ui.gtkui.gtkui import reactor
 from deluge.log import LOG as log
 from deluge.ui.client import client
 
+import gtk, gtk.glade
 import gtk_osxapplication
 
 class OSX(object):
@@ -45,7 +46,66 @@ class OSX(object):
         self.gtkui = gtkui
         self.osxapp = gtk_osxapplication.OSXApplication()
         self.connect()
+        self.menu_bar()
         self.osxapp.ready()
+
+    def accel_swap(self, item, group, skey, smod, dkey, dmod):
+        item.remove_accelerator(group, ord(skey), smod)
+        item.add_accelerator("activate", group, ord(dkey), dmod, gtk.ACCEL_VISIBLE)
+
+    def accel_meta(self, item, group, key):
+        self.accel_swap(item, group, key, gtk.gdk.CONTROL_MASK, key, gtk.gdk.META_MASK)
+
+    def menu_bar(self):
+        log.debug('menu_bar')
+        window = self.gtkui.mainwindow
+        glade  = window.main_glade
+        menubar = glade.get_widget("menubar")
+        group = gtk.accel_groups_from_object(window.window)[0]
+
+        # NOTE: accel maps doesn't work with glade file format
+        # because of libglade not setting MenuItem accel groups
+        # That's why we remove / set accelerators by hand... (dirty)
+        # Clean solution: migrate glades files to gtkbuilder format
+        file_menu = glade.get_widget("menu_file").get_submenu()
+        file_items = file_menu.get_children()
+        self.accel_meta(file_items[0], group, 'o')
+        self.accel_meta(file_items[1], group, 'n')
+        quit_all_item = file_items[3]
+        self.accel_swap(quit_all_item, group, 'q', gtk.gdk.SHIFT_MASK | gtk.gdk.CONTROL_MASK,
+                                              'q', gtk.gdk.SHIFT_MASK | gtk.gdk.META_MASK)
+        for item in range(2, len(file_items)): # remove quits
+            file_menu.remove(file_items[item])
+
+        menu_widget = glade.get_widget("menu_edit")
+        edit_menu = menu_widget.get_submenu()
+        edit_items = edit_menu.get_children()
+        pref_item = edit_items[0]
+        self.accel_swap(pref_item, group, 'p', gtk.gdk.CONTROL_MASK, ',', gtk.gdk.META_MASK)
+        edit_menu.remove(pref_item)
+
+        conn_item = edit_items[1]
+        self.accel_meta(conn_item, group, 'm')
+        edit_menu.remove(conn_item)
+
+        menubar.remove(menu_widget)
+
+        help_menu = glade.get_widget("menu_help").get_submenu()
+        help_items = help_menu.get_children()
+        about_item = help_items[4]
+        help_menu.remove(about_item)
+        help_menu.remove(help_items[3]) # separator
+
+        menubar.hide()
+        self.osxapp.set_menu_bar(menubar)
+        # populate app menu
+        self.osxapp.insert_app_menu_item(about_item, 0)
+        self.osxapp.insert_app_menu_item(gtk.SeparatorMenuItem(), 1)
+        self.osxapp.insert_app_menu_item(pref_item, 2)
+        self.osxapp.insert_app_menu_item(conn_item, 3)
+        if quit_all_item.get_visible():
+            self.osxapp.insert_app_menu_item(gtk.SeparatorMenuItem(), 4)
+            self.osxapp.insert_app_menu_item(quit_all_item, 5)
 
     def connect(self):
         self.osxapp.connect("NSApplicationOpenFile", self.open_file)
