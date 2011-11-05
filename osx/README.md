@@ -74,30 +74,41 @@ Quick how-to *(from the full [GTK-OSX building][2] instructions)*
         cd osx
         ./make-app.sh
 
-You should have now a working Deluge.app
+You *should* have now a working Deluge.app
 
 ## Issues
 
-If Deluge.app doesn't work the first thing to do is to check OSX Console
-for logs and/or crash reports.
+If Deluge.app doesn't work or crash the first thing to do is to check OSX
+Console for logs and/or crash reports. Alternatively, you can enable python
+log by uncommenting the end of script `Deluge.app/Contents/MacOS/Deluge`
 
-There is a one that I encountered on Lion:
+### Known issues
 
-- `ImportError: dynamic module does not define init function (init_gtk)`
+- **WebUI**: Does not work, plugin fails silently
+- **i18n**: English only for now
 
-    There is an issue building pygtk, some symbols are not correctly exported,
-    see [more details about this][4].
+## Changelog
 
-    The quick workaround is, from a jhbuild shell, to recompile pygtk with the following:
+- **v1.3.3-1**: first release
 
-        jhbuild shell
-        cd Source/gtk/pygtk*
-        sed -i -e 's/export-symbols-regex/export_symbol/g' `grep -lr 'export-symbols-regex' .`
-        autoreconf -fis -I m4
-        ./configure --prefix $JHBUILD_PREFIX --libdir '$JHBUILD_PREFIX/lib' CFLAGS="$CFLAGS -xobjective-c" lt_cv_sys_global_symbol_pipe="'sed -n -e '\''s/^.*[ ]\([BCDEGRST][BCDEGRST]*\)[ ][ ]*_\([_A-Za-z][_A-Za-z0-9]*\)$/\1 _\2 \2/p'\'' | sed '\''/ __gnu_lto/d'\'''"
-        make clean && make install
+- **v1.3.3-2**: **OSX integration**: [gtk-mac-integration][7]
+    - Torrent files association (with a *nice* doc icon)
+    - OSX MenuBar
+    - OSX Accelerators: `<cmd>` instead of `<control>`
 
-    Then rebuild Deluge.app
+## TODO
+
+by order of priority/feasability:
+
+- **Notifications**: Growl
+
+    *pynotify and pygame are not included because I don't think there is
+    a way to bridge them with growl. Hopefully deluge handle this missing
+    dependencies cleanly. (just logs warnings)*
+
+- **Auto-Update**: Sparkle
+
+    *Probably needs a native wrapper instead of the current shell script...*
 
 ## Thanks to
 
@@ -112,4 +123,5 @@ There is a one that I encountered on Lion:
 [4]:http://sourceforge.net/apps/phpbb/gtk-osx/viewtopic.php?t=72
 [5]:http://winswitch.org/dev/macosx.html
 [6]:http://mail.python.org/pipermail/pythonmac-sig/2011-October/023376.html
+[7]:https://github.com/jralls/gtk-mac-integration
 
