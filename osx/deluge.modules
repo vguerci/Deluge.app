@@ -69,10 +69,12 @@
         <dependencies>
             <dep package="setuptools"/>
             <dep package="chardet"/>
-            <dep package="twisted"/>
             <dep package="pyopenssl"/>
             <dep package="pyxdg"/>
             <dep package="py2app"/>
+            <dep package="mako"/>
+            <dep package="twisted"/>
+            <dep package="twisted-web"/>
         </dependencies>
     </metamodule>
     <repository type="tarball" name="pypi"
@@ -85,10 +87,6 @@
         <branch repo="pypi" version="1.0.1"
             module="c/chardet/chardet-1.0.1.tar.gz"/>
     </distutils>
-    <distutils id="twisted">
-        <branch repo="pypi" version="11.0.0"
-            module="T/Twisted/Twisted-11.0.0.tar.bz2"/>
-    </distutils>
     <distutils id="pyopenssl">
         <branch repo="pypi" version="0.13"
             module="p/pyOpenSSL/pyOpenSSL-0.13.tar.gz"/>
@@ -100,6 +98,24 @@
     <distutils id="py2app">
         <branch repo="pypi" version="0.6.3"
             module="p/py2app/py2app-0.6.3.tar.gz"/>
+    </distutils>
+    <distutils id="mako">
+        <branch repo="pypi" version="0.5.0"
+            module="M/Mako/Mako-0.5.0.tar.gz"
+            md5sum="2726f95d223fb53120fbb82cd4acb064"/>
+    </distutils>
+
+    <repository type="tarball" name="twistedmatrix"
+        href="http://twistedmatrix.com/Releases/"/>
+    <distutils id="twisted">
+        <branch repo="twistedmatrix" version="11.0.0"
+            module="Twisted/11.0/Twisted-11.0.0.tar.bz2"
+            md5sum="d7f94a1609a1b8f3b8c8d0146d4cfe54"/>
+    </distutils>
+    <distutils id="twisted-web">
+        <branch repo="twistedmatrix" version="8.1.0"
+            module="Web2/8.1/TwistedWeb2-8.1.0.tar.bz2"
+            md5sum="e34b48edf6fef075bd41ddbd215aed32"/>
     </distutils>
 
 </moduleset>
