@@ -11,6 +11,7 @@
   <binary dest="${bundle}/Contents/MacOS/Deluge-python">
       ${prefix}/bin/python
   </binary>
+  <!-- not used: binary>${prefix}/lib/${gtkdir}/modules/*.so</binary-->
   <binary>${prefix}/lib/gdk-pixbuf-2.0/2.10.0/loaders/*.so</binary>
   <binary>${prefix}/lib/libpyglib-2.0-python.0.dylib</binary>
   <binary>${prefix}/lib/libgtk-quartz-2.0.0.dylib</binary>
@@ -26,8 +27,10 @@
   </data>
   <data>${prefix}/lib/pygtk/2.0/</data>
   <!-- gtk theme -->
+  <binary>${prefix}/lib/${gtkdir}/${pkg:${gtk}:gtk_binary_version}/engines/libclearlooks.so</binary>
   <data>${prefix}/share/themes/Clearlooks</data>
-  <binary>${prefix}/lib/gtk-2.0/2.10.0/engines/libclearlooks.so</binary>
+  <data>${prefix}/share/themes/Mac</data><!-- required for stock accelerators cmd-X etc... -->
+  <!-- Emacs shortcuts doesn't work: data>${prefix}/share/themes/Emacs</data-->
   <data dest="${bundle}/Contents/Resources/etc/gtk-2.0/gtkrc">${project}/gtkrc</data>
   <data dest="${bundle}/Contents/Resources">${project}/deluge.icns</data>
   <data dest="${bundle}/Contents/Resources">${project}/torrent.icns</data>
