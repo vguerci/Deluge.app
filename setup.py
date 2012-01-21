@@ -544,7 +544,7 @@ if osx_check():
                 'includes': [
                     'glib', 'gio', 'cairo', 'pango', 'pangocairo', 'atk', 'gobject', 'gtk.keysyms',
                     'libtorrent',
-                    'twisted.internet', 'twisted.protocols', 'zope.interface',
+                    'twisted.internet', 'twisted.protocols', 'zope.interface', 'mako.cache',
                 ],
                 'frameworks': ['CoreFoundation', 'Foundation', 'AppKit'],
         }}
