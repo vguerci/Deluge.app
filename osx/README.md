@@ -96,6 +96,14 @@ log by uncommenting the end of script `Deluge.app/Contents/MacOS/Deluge`
     - OSX MenuBar
     - OSX Accelerators: `<cmd>` instead of `<control>`
 
+- **v1.3.3-3**:
+    - Fix: Web interface bug (mako.cache missing)
+    - New: i386 build (classic mode fails, libtorrent issue)
+    - Updates:
+        - libtorrent 0.15.8 > 0.15.9
+        - Several python dependencies
+        - jhbuild environment
+
 ## TODO
 
 by order of priority/feasability:
