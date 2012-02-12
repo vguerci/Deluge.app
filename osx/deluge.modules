@@ -109,5 +109,22 @@
             md5sum="e34b48edf6fef075bd41ddbd215aed32"/>
     </distutils>
 
+    <!--Failed attempt to build universal glib-->
+    <repository type="tarball" name="ftp.gnome.org"
+        href="http://ftp.gnome.org/pub/GNOME/sources/"/>
+    <autotools id="glib2" autogen-sh="configure" autogenargs="--enable-static">
+        <branch module="glib/2.28/glib-2.28.8.tar.bz2" version="2.28.8" repo="ftp.gnome.org"
+            hash="sha256:222f3055d6c413417b50901008c654865e5a311c73f0ae918b0a9978d1f9466f">
+            <patch file="https://trac.macports.org/export/87264/trunk/dports/devel/glib2/files/patch-configure.ac.diff"/>
+            <patch file="https://trac.macports.org/export/87264/trunk/dports/devel/glib2/files/patch-glib-2.0.pc.in.diff"/>
+            <patch file="https://trac.macports.org/export/87264/trunk/dports/devel/glib2/files/patch-glib_gunicollate.c.diff"/>
+            <patch file="https://trac.macports.org/export/87264/trunk/dports/devel/glib2/files/patch-gi18n.h.diff"/>
+            <patch file="https://trac.macports.org/export/87264/trunk/dports/devel/glib2/files/patch-gio_xdgmime_xdgmime.c.diff"/>
+        </branch>
+        <after>
+            <dep package="meta-gtk-osx-bootstrap"/>
+            <dep package="gtk-doc"/>
+        </after>
+    </autotools>
 </moduleset>
 
