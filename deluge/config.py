@@ -415,7 +415,7 @@ what is currently in the config and it could not convert the value
                 if self._save_timer and self._save_timer.active():
                     self._save_timer.cancel()
                 return True
-        except IOError, e:
+        except (IOError, IndexError), e:
             log.warning("Unable to open config file: %s because: %s", filename, e)
 
         # Save the new config and make sure it's written to disk
@@ -436,7 +436,7 @@ what is currently in the config and it could not convert the value
             log.debug("Backing up old config file to %s~", filename)
             shutil.move(filename, filename + "~")
         except Exception, e:
-            log.error("Error backing up old config..")
+            log.warning("Unable to backup old config...")
 
         # The new config file has been written successfully, so let's move it over
         # the existing one.

@@ -55,16 +55,33 @@ deluge.ui = {
 		deluge.preferences = new Deluge.preferences.PreferencesWindow();
 		deluge.sidebar = new Deluge.Sidebar();
 		deluge.statusbar = new Deluge.Statusbar();
+		deluge.toolbar = new Deluge.Toolbar();
+
+		this.detailsPanel = new Ext.Panel({
+			id: 'detailsPanel',
+			cls: 'detailsPanel',
+			region: 'south',
+			split: true,
+			height: 215,
+			minSize: 100,
+			collapsible: true,
+			margins: '0 5 5 5',
+			cmargins: '0 5 5 5',
+			layout: 'fit',
+			items: [
+				deluge.details
+			],
+		});
 
 		this.MainPanel = new Ext.Panel({
 			id: 'mainPanel',
 			iconCls: 'x-deluge-main-panel',
-			title: 'Deluge',
 			layout: 'border',
+			border: false,
 			tbar: deluge.toolbar,
 			items: [
 				deluge.sidebar,
-				deluge.details,
+				this.detailsPanel,
 				deluge.torrents
 			],
 			bbar: deluge.statusbar
@@ -168,9 +185,9 @@ deluge.ui = {
 		}
 
 		if (deluge.config.show_session_speed) {
-			document.title = this.originalTitle +
-				' (Down: ' + fspeed(data['stats'].download_rate, true) +
-				' Up: ' + fspeed(data['stats'].upload_rate, true) + ')';
+			document.title = 'D: ' + fsize_short(data['stats'].download_rate, true) +
+				' U: ' + fsize_short(data['stats'].upload_rate, true) + ' - ' +
+				this.originalTitle;
 		}
 		if (Ext.areObjectsEqual(this.filters, this.oldFilters)) {
 			deluge.torrents.update(data['torrents']);

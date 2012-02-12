@@ -39,8 +39,6 @@ pygtk.require('2.0')
 import gtk, gtk.glade
 import gobject
 import pkg_resources
-from urlparse import urlparse
-import urllib
 
 from deluge.ui.client import client
 import deluge.component as component
@@ -160,7 +158,10 @@ class MainWindow(component.Component):
         :type shutdown: boolean
         """
         if shutdown:
-            client.daemon.shutdown()
+            try:
+                client.daemon.shutdown()
+            except AttributeError, e:
+                log.error("Encountered error attempting to shutdown daemon: %s", e)
         reactor.stop()
 
     def load_window_state(self):
@@ -215,10 +216,11 @@ class MainWindow(component.Component):
         self.config["window_pane_position"] = self.vpaned.get_position()
 
     def on_drag_data_received_event(self, widget, drag_context, x, y, selection_data, info, timestamp):
-        args = []
-        for uri in selection_data.data.split():
-            args.append(urllib.unquote(uri))
-        process_args(args)
+        log.debug("Selection(s) dropped on main window %s", selection_data.data)
+        if selection_data.get_uris():
+            process_args(selection_data.get_uris())
+        else:
+            process_args(selection_data.data.split())
         drag_context.finish(True, True)
 
     def on_expose_event(self, widget, event):
@@ -230,11 +232,11 @@ class MainWindow(component.Component):
     def update(self):
         # Update the window title
         def _on_get_session_status(status):
-            download_rate = deluge.common.fspeed(status["download_rate"])
-            upload_rate = deluge.common.fspeed(status["upload_rate"])
-            self.window.set_title("Deluge - %s %s %s %s" % (_("Down:"), download_rate, _("Up:"), upload_rate))
+            download_rate = deluge.common.fsize_short(status["payload_download_rate"])
+            upload_rate = deluge.common.fsize_short(status["payload_upload_rate"])
+            self.window.set_title("%s%s %s%s - Deluge" % (_("D:"), download_rate, _("U:"), upload_rate))
         if self.config["show_rate_in_title"]:
-            client.core.get_session_status(["download_rate", "upload_rate"]).addCallback(_on_get_session_status)
+            client.core.get_session_status(["payload_download_rate", "payload_upload_rate"]).addCallback(_on_get_session_status)
 
     def _on_set_show_rate_in_title(self, key, value):
         if value:

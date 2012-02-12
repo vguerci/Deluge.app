@@ -316,7 +316,9 @@ class Torrent(object):
                     self.update_state()
                     break
 
-        self.options["file_priorities"] = file_priorities
+        self.options["file_priorities"] = self.handle.file_priorities()
+        if self.options["file_priorities"] != list(file_priorities):
+            log.warning("File priorities were not set for this torrent")
 
         # Set the first/last priorities if needed
         self.set_prioritize_first_last(self.options["prioritize_first_last_pieces"])
@@ -645,8 +647,8 @@ class Torrent(object):
             "total_done": self.status.total_done,
             "total_payload_download": self.status.total_payload_download,
             "total_payload_upload": self.status.total_payload_upload,
-            "total_peers": self.status.list_peers - self.status.list_seeds,
-            "total_seeds":  self.status.list_seeds,
+            "total_peers": self.status.num_incomplete,
+            "total_seeds":  self.status.num_complete,
             "total_uploaded": self.status.all_time_upload,
             "total_wanted": self.status.total_wanted,
             "tracker": self.status.current_tracker,
