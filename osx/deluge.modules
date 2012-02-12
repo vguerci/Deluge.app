@@ -19,7 +19,7 @@
         href="http://libtorrent.googlecode.com/files/"/>
     <autotools id="libtorrent" autogen-sh="configure"
         autogen-template="%(srcdir)s/%(autogen-sh)s --prefix=%(prefix)s --with-boost-libdir=%(libdir)s --with-openssl=%(prefix)s %(autogenargs)s"
-        autogenargs="--enable-python-binding CPPFLAGS='-DBOOST_FILESYSTEM_VERSION=2'">
+        autogenargs="--enable-python-binding CPPFLAGS='-DBOOST_FILESYSTEM_VERSION=2' --with-boost-thread=boost_thread">
         <branch repo="libtorrent" version="0.15.8"
             module="libtorrent-rasterbar-0.15.8.tar.gz"
             hash="sha1:9e21ebfa6fba19b237754a10ae9b8007781c48f0"/>
@@ -34,6 +34,7 @@
     <autotools id="openssl" autogen-sh="Configure"
         autogen-template="%(srcdir)s/%(autogen-sh)s --prefix=%(prefix)s -L%(libdir)s --openssldir=%(prefix)s/etc/openssl %(autogenargs)s"
         autogenargs="darwin64-x86_64-cc zlib no-asm no-krb5 shared">
+        <!--autogenargs="darwin-i386-cc zlib no-asm no-krb5 shared">-->
         <branch repo="openssl" version="1.0.0e"
             module="openssl-1.0.0e.tar.gz"
             md5sum="7040b89c4c58c7a1016c0dfa6e821c86"/>
@@ -44,6 +45,8 @@
         supports-non-srcdir-builds="false"
         makeargs="|| ./b2 link=shared threading=multi variant=release"
         makeinstallargs="|| ./b2 install link=shared threading=multi variant=release">
+        <!--makeargs="|| ./b2 architecture=x86 link=shared threading=multi variant=release"
+        makeinstallargs="|| ./b2 install architecture=x86 link=shared threading=multi variant=release"-->
         <branch repo="sourceforge"
             module="boost/boost_1_47_0.tar.bz2" version="1.47"
             md5sum="a2dc343f7bc7f83f8941e47ed4a18200"/>
