@@ -39,23 +39,11 @@
             md5sum="7040b89c4c58c7a1016c0dfa6e821c86"/>
     </autotools>
 
-    <!-- Ugly workaround to call b2 instead of make -->
-    <metamodule id="boost">
-        <dependencies>
-            <!-- TODO <dep package="icu"/>-->
-            <dep package="boost-conf"/>
-            <dep package="boost-install"/>
-        </dependencies>
-    </metamodule>
-    <autotools id="boost-conf" autogen-sh="bootstrap.sh"
-        autogen-template="%(srcdir)s/%(autogen-sh)s --prefix=%(prefix)s --libdir=%(prefix)s --with-python=%(prefix)s/bin/python --with-icu=%(prefix)s --without-libraries=mpi %(autogenargs)s"
-        autogenargs="&amp;&amp; echo 'all:' &gt; makefile">
-        <branch repo="sourceforge"
-            module="boost/boost_1_47_0.tar.bz2" version="1.47"
-            md5sum="a2dc343f7bc7f83f8941e47ed4a18200"/>
-    </autotools>
-    <autotools id="boost-install" autogen-sh="b2 install"
-        autogen-template="%(srcdir)s/%(autogen-sh)s --prefix=%(prefix)s --libdir=%(libdir)s %(autogenargs)s">
+    <autotools id="boost" autogen-sh="bootstrap.sh"
+        autogen-template="%(srcdir)s/%(autogen-sh)s --prefix=%(prefix)s --libdir=%(prefix)s/lib --with-python=%(prefix)s/bin/python --with-icu=%(prefix)s --without-libraries=mpi"
+        supports-non-srcdir-builds="false"
+        makeargs="|| ./b2 link=shared threading=multi variant=release"
+        makeinstallargs="|| ./b2 install link=shared threading=multi variant=release">
         <branch repo="sourceforge"
             module="boost/boost_1_47_0.tar.bz2" version="1.47"
             md5sum="a2dc343f7bc7f83f8941e47ed4a18200"/>
