@@ -71,7 +71,7 @@
     <repository type="tarball" name="pypi"
         href="http://pypi.python.org/packages/source/"/>
     <distutils id="setuptools">
-        <branch repo="pypi" version="1.0.0e"
+        <branch repo="pypi" version="0.6c11"
             module="s/setuptools/setuptools-0.6c11.tar.gz"/>
     </distutils>
     <distutils id="chardet">
@@ -87,13 +87,12 @@
             module="p/pyxdg/pyxdg-0.19.tar.gz"/>
     </distutils>
     <distutils id="py2app">
-        <branch repo="pypi" version="0.6.3"
-            module="p/py2app/py2app-0.6.3.tar.gz"/>
+        <branch repo="pypi" version="0.6.4"
+            module="p/py2app/py2app-0.6.4.tar.gz"/>
     </distutils>
     <distutils id="mako">
-        <branch repo="pypi" version="0.5.0"
-            module="M/Mako/Mako-0.5.0.tar.gz"
-            md5sum="2726f95d223fb53120fbb82cd4acb064"/>
+        <branch repo="pypi" version="0.6.2"
+            module="M/Mako/Mako-0.6.2.tar.gz"/>
     </distutils>
 
     <repository type="tarball" name="twistedmatrix"
