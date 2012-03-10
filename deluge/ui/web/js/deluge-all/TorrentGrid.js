@@ -51,7 +51,12 @@
 		value = new Number(value);
 		var progress = value;
 		var text = r.data['state'] + ' ' + value.toFixed(2) + '%';
-		var width = new Number(p.style.match(/\w+:\s*(\d+)\w+/)[1]);
+		if ( this.style ) {
+			var style = this.style
+		} else {
+			var style = p.style
+		}
+		var width = new Number(style.match(/\w+:\s*(\d+)\w+/)[1]);
 		return Deluge.progressBar(value, width - 8, text);
 	}
 	function seedsRenderer(value, p, r) {
@@ -254,11 +259,28 @@
 			]
 		},
 
+		keys: [{
+			key: 'a',
+			ctrl: true,
+			stopEvent: true,
+			handler: function() {
+				deluge.torrents.getSelectionModel().selectAll();
+			}
+		}, {
+			key: [46],
+			stopEvent: true,
+			handler: function() {
+				ids = deluge.torrents.getSelectedIds();
+				deluge.removeWindow.show(ids);
+			}
+		}],
+
 		constructor: function(config) {
 			config = Ext.apply({
 				id: 'torrentGrid',
 				store: new Ext.data.JsonStore(this.meta),
 				columns: this.columns,
+				keys: this.keys,
 				region: 'center',
 				cls: 'deluge-torrents',
 				stripeRows: true,

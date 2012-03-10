@@ -448,7 +448,7 @@ class TorrentManager(component.Component):
         handle = None
         try:
             if magnet:
-                handle = lt.add_magnet_uri(self.session, magnet, add_torrent_params)
+                handle = lt.add_magnet_uri(self.session, utf8_encoded(magnet), add_torrent_params)
             else:
                 handle = self.session.add_torrent(add_torrent_params)
         except RuntimeError, e:
@@ -875,9 +875,9 @@ class TorrentManager(component.Component):
                 if torrent.options["download_location"] != move_path:
                     torrent.move_storage(move_path)
 
-            torrent.is_finished = True
             component.get("EventManager").emit(TorrentFinishedEvent(torrent_id))
 
+        torrent.is_finished = True
         torrent.update_state()
 
         # Only save resume data if it was actually downloaded something. Helps
@@ -989,7 +989,6 @@ class TorrentManager(component.Component):
             torrent_id = str(alert.handle.info_hash())
         except:
             return
-        torrent.is_finished = torrent.handle.is_seed()
         old_state = torrent.state
         torrent.update_state()
         if torrent.state != old_state:
@@ -1007,6 +1006,11 @@ class TorrentManager(component.Component):
 
         old_state = torrent.state
         torrent.update_state()
+
+        # Torrent may need to download data after checking.
+        if torrent.state in ('Checking', 'Checking Resume Data', 'Downloading'):
+            torrent.is_finished = False
+
         # Only emit a state changed event if the state has actually changed
         if torrent.state != old_state:
             component.get("EventManager").emit(TorrentStateChangedEvent(torrent_id, torrent.state))

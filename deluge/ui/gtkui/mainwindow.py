@@ -44,7 +44,8 @@ from deluge.ui.client import client
 import deluge.component as component
 from deluge.configmanager import ConfigManager
 from deluge.ui.gtkui.ipcinterface import process_args
-from twisted.internet import reactor
+from twisted.internet import reactor, defer
+from twisted.internet.error import ReactorNotRunning
 
 import deluge.common
 import common
@@ -157,12 +158,31 @@ class MainWindow(component.Component):
         :param shutdown: whether or not to shutdown the daemon as well
         :type shutdown: boolean
         """
-        if shutdown:
+
+        def shutdown_daemon(result):
+            return client.daemon.shutdown()
+
+        def disconnect_client(result):
+            return client.disconnect()
+
+        def stop_reactor(result):
             try:
-                client.daemon.shutdown()
-            except AttributeError, e:
-                log.error("Encountered error attempting to shutdown daemon: %s", e)
-        reactor.stop()
+                reactor.stop()
+            except ReactorNotRunning:
+                log.debug("Attempted to stop the reactor but it is not running...")
+
+        def log_failure(failure, action):
+            log.error("Encountered error attempting to %s: %s" % \
+                      (action, failure.getErrorMessage()))
+
+        d = defer.succeed(None)
+        if shutdown:
+            d.addCallback(shutdown_daemon)
+            d.addErrback(log_failure, "shutdown daemon")
+        if not client.is_classicmode() and client.connected():
+            d.addCallback(disconnect_client)
+            d.addErrback(log_failure, "disconnect client")
+        d.addBoth(stop_reactor)
 
     def load_window_state(self):
         x = self.config["window_x_pos"]
@@ -186,7 +206,7 @@ class MainWindow(component.Component):
             if event.new_window_state & gtk.gdk.WINDOW_STATE_MAXIMIZED:
                 log.debug("pos: %s", self.window.get_position())
                 self.config["window_maximized"] = True
-            else:
+            elif not event.new_window_state & gtk.gdk.WINDOW_STATE_WITHDRAWN:
                 self.config["window_maximized"] = False
         if event.changed_mask & gtk.gdk.WINDOW_STATE_ICONIFIED:
             if event.new_window_state & gtk.gdk.WINDOW_STATE_ICONIFIED:

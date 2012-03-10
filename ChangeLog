@@ -1,8 +1,13 @@
-=== Deluge 1.3.4 (In Development) ===
+=== Deluge 1.3.4 (03 March 2012) ===
 ==== Core ====
 	* #1921: Free disk space reporting incorrectly in FreeBSD
 	* #1964: Fix unhandled UnpicklingErrors
 	* #1967: Fix unhandled IndexError when trying to open a non-json conf file
+	* Fix setting daemon listen interface from command line
+	* #2021: Fix share ratio limit not obeyed for seeded torrents added to session
+	* Add optparse custom version to prevent unnecessary loading of libtorrent
+	* #1554: Fix seeding on share ratio failing for partially selected torrents
+	* Add proper process title naming in ps, top etc. (Depends: setproctitle)
 
 ==== GtkUI ====
 	* #1918: Fix Drag'n'Drop not working in Windows
@@ -14,6 +19,11 @@
 	* #1969: Fix menu item 'Quit & Shutdown' still available when not connected to daemon
 	* #1895: Fix Files Tab showing wrong files due to torrent_info race condition
 	* #2010: Move speed text in titlebar to the beginning
+	* #2032: Wait for client to shutdown/disconnect before stopping reactor
+	* Fix compatibility with Python 2.5
+	* Fix collapsed treeview in Create Torrent dialog
+	* Ignore unmaximise event when window isn't visible
+	* #1976: Fixed text entry with trailing newline characters causing issues for Move Storage
 
 ==== WebUI ====
 	* Fix Webui files-tab menu setting wrong priority
@@ -26,16 +36,37 @@
 	* Fix plugin uploads from behind a reverse proxy
 	* #2010: Move speed text in titlebar to the beginning
 	* #1936: Fix Referenced before assignment error in json_api
+	* Changes are now applied when clicking OK in Preferences
+	* Added Download,Uploaded,Down Limit, Up Limit & Seeder/Peeds columns
+	* Add magnet uri support to Add Url
+	* Add keymaps for torrents - Ctrl-A (select all) and Delete
+	* #2037: Fix 'Add Torrents' torrents list not scrolling
+	* #2038: Fix Chrome 17 disconnecting from webui
 
 ==== Console ====
 	* #1953: Fix flickering on every update
+	* #1954: Fix 'invalid literal for float' when setting listen interface
+	* #1945: Fix UnicodeDecodeError when using non-ascii chars in info
 
 ==== Label ====
 	* #1961: Add missing 'All' filter option
+	* #2035: Fix label options dialog in webui
+	* #2036: Fix newly added labels not being sorted in torrent right click menu
 
 ==== Notification ====
 	* #1905: Fix no email sent to second email address
 	* #1898: Fix email notifications not including date/time they were sent
+
+==== Scheduler ====
+	* Add plugin page for WebUi
+
+==== Execute ====
+	* Commands now run scripts asynchronous to prevent Deluge from hanging
+
+==== AutoAdd ====
+	* Added watch folder support for '.magnet' text file containing single or multiple magnet uris
+	* Fix glade object issue when re-enabling plugin in same session
+	* Fix plugin not showing as enabled in webui
 
 === Deluge 1.3.3 (22 July 2011) ===
 ==== Core ====

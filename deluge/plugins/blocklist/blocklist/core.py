@@ -59,7 +59,7 @@ from readers import ReaderParseError
 # TODO: review class attributes for redundancy
 
 DEFAULT_PREFS = {
-    "url": "http://deluge-torrent.org/blocklist/nipfilter.dat.gz",
+    "url": "",
     "load_on_start": False,
     "check_after_days": 4,
     "list_compression": "",
@@ -97,12 +97,13 @@ class Core(CorePluginBase):
         update_now = False
         if self.config["load_on_start"]:
             self.pause_session()
-            if self.config["last_update"]:
-                last_update = datetime.fromtimestamp(self.config["last_update"])
-                check_period = timedelta(days=self.config["check_after_days"])
-            if not self.config["last_update"] or last_update + check_period < datetime.now():
-                update_now = True
-            else:
+            if self.config["check_after_days"] > 0:
+                if self.config["last_update"]:
+                    last_update = datetime.fromtimestamp(self.config["last_update"])
+                    check_period = timedelta(days=self.config["check_after_days"])
+                if not self.config["last_update"] or last_update + check_period < datetime.now():
+                    update_now = True
+            if not update_now:
                 d = self.import_list(deluge.configmanager.get_config_dir("blocklist.cache"))
                 d.addCallbacks(self.on_import_complete, self.on_import_error)
                 if self.need_to_resume_session:
@@ -110,8 +111,9 @@ class Core(CorePluginBase):
 
         # This function is called every 'check_after_days' days, to download
         # and import a new list if needed.
-        self.update_timer = LoopingCall(self.check_import)
-        self.update_timer.start(self.config["check_after_days"] * 24 * 60 * 60, update_now)
+        if self.config["check_after_days"] > 0:
+            self.update_timer = LoopingCall(self.check_import)
+            self.update_timer.start(self.config["check_after_days"] * 24 * 60 * 60, update_now)
 
     def disable(self):
         self.config.save()

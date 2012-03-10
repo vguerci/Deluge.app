@@ -110,7 +110,7 @@ class Daemon(object):
 
         # Twisted catches signals to terminate, so just have it call the shutdown
         # method.
-        reactor.addSystemEventTrigger("after", "shutdown", self.shutdown)
+        reactor.addSystemEventTrigger("before", "shutdown", self._shutdown)
 
         # Catch some Windows specific signals
         if deluge.common.windows_check():
@@ -133,9 +133,14 @@ class Daemon(object):
         if options and options.config:
             deluge.configmanager.set_config_dir(options.config)
 
+        if options and options.listen_interface:
+            listen_interface = options.listen_interface
+        else:
+            listen_interface = ""
+
         from deluge.core.core import Core
         # Start the core as a thread and join it until it's done
-        self.core = Core()
+        self.core = Core(listen_interface=listen_interface)
 
         port = self.core.config["daemon_port"]
         if options and options.port:
@@ -177,17 +182,16 @@ class Daemon(object):
         reactor.callLater(0, reactor.stop)
 
     def _shutdown(self, *args, **kwargs):
-        try:
-            os.remove(deluge.configmanager.get_config_dir("deluged.pid"))
-        except Exception, e:
-            log.exception(e)
-            log.error("Error removing deluged.pid!")
+        if os.path.exists(deluge.configmanager.get_config_dir("deluged.pid")):
+            try:
+                os.remove(deluge.configmanager.get_config_dir("deluged.pid"))
+            except Exception, e:
+                log.exception(e)
+                log.error("Error removing deluged.pid!")
 
-        component.shutdown()
-        try:
-            reactor.stop()
-        except twisted.internet.error.ReactorNotRunning:
-            log.debug("Tried to stop the reactor but it is not running..")
+        log.info("Waiting for components to shutdown..")
+        d = component.shutdown()
+        return d
 
     @export()
     def info(self):

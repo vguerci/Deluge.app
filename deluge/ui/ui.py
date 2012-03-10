@@ -33,17 +33,27 @@
 #
 #
 
+import os
+import sys
 from optparse import OptionParser, OptionGroup
+
 import deluge.common
 import deluge.configmanager
 import deluge.log
-import os
 
 try:
-    from deluge._libtorrent import lt
-    lt_version = "\nlibtorrent: %s" % lt.version
+    from setproctitle import setproctitle
 except ImportError:
-    lt_version = ""
+    setproctitle = lambda t: None
+
+def version_callback(option, opt_str, value, parser):
+    print os.path.basename(sys.argv[0]) + ": " + deluge.common.get_version()
+    try:
+        from deluge._libtorrent import lt
+        print "libtorrent: %s" % lt.version
+    except ImportError:
+        pass
+    raise SystemExit
 
 DEFAULT_PREFS = {
     "default_ui": "gtk"
@@ -58,10 +68,9 @@ class _UI(object):
     def __init__(self, name="gtk"):
         self.__name = name
 
-        usage="%prog [options] [actions]",
-
-        self.__parser = OptionParser(version="%prog: " + deluge.common.get_version() + lt_version)
-
+        self.__parser = OptionParser(usage="%prog [options] [actions]")
+        self.__parser.add_option("-v", "--version", action="callback", callback=version_callback,
+            help="Show program's version number and exit")
         group = OptionGroup(self.__parser, "Common Options")
         group.add_option("-c", "--config", dest="config",
             help="Set the config folder location", action="store", type="str")
@@ -107,10 +116,12 @@ class _UI(object):
                 log.error("There was an error setting the config dir! Exiting..")
                 sys.exit(1)
 
+        setproctitle("deluge-%s" % self.__name)
+
         log.info("Deluge ui %s", deluge.common.get_version())
         log.debug("options: %s", self.__options)
         log.debug("args: %s", self.__args)
-        log.info("Starting ui..")
+        log.info("Starting %s ui..", self.__name)
 
 class UI:
     def __init__(self, options, args, ui_args):
@@ -126,6 +137,8 @@ class UI:
             selected_ui = config["default_ui"]
         else:
             selected_ui = options.ui
+
+        setproctitle("deluge")
 
         config.save()
         del config
