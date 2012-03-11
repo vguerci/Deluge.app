@@ -35,9 +35,9 @@
         autogen-template="%(srcdir)s/%(autogen-sh)s --prefix=%(prefix)s -L%(libdir)s --openssldir=%(prefix)s/etc/openssl %(autogenargs)s"
         autogenargs="darwin64-x86_64-cc zlib no-asm no-krb5 shared">
         <!--autogenargs="darwin-i386-cc zlib no-asm no-krb5 shared">-->
-        <branch repo="openssl" version="1.0.0e"
-            module="openssl-1.0.0e.tar.gz"
-            md5sum="7040b89c4c58c7a1016c0dfa6e821c86"/>
+        <branch repo="openssl" version="1.0.0g"
+            module="openssl-1.0.0g.tar.gz"
+            md5sum="07ecbe4324f140d157478637d6beccf1"/>
     </autotools>
 
     <autotools id="boost" autogen-sh="bootstrap.sh"

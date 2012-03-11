@@ -109,6 +109,7 @@ log by uncommenting the end of script `Deluge.app/Contents/MacOS/Deluge`
     - Updated libs:
         - libtorrent 0.15.9 > 0.15.10
         - boost 1.47 > 1.49
+        - openssl 1.0.0e > 1.0.0g
 
 ## TODO
 
