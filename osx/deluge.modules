@@ -48,8 +48,8 @@
         <!--makeargs="|| ./b2 architecture=x86 link=shared threading=multi variant=release"
         makeinstallargs="|| ./b2 install architecture=x86 link=shared threading=multi variant=release"-->
         <branch repo="sourceforge"
-            module="boost/boost_1_47_0.tar.bz2" version="1.47"
-            md5sum="a2dc343f7bc7f83f8941e47ed4a18200"/>
+            module="boost/boost_1_49_0.tar.bz2" version="1.49"
+            md5sum="0d202cb811f934282dea64856a175698"/>
     </autotools>
 
     <autotools id="gtk-mac-bundler" autogen-template="echo no configure">
