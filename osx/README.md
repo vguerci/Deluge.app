@@ -3,10 +3,10 @@
 ## 1. Compiler
 
 - To build deluge and the gtk osx modules, you must use `gcc`
-    - That probably doesn't work with `llvm-gcc` or `clang`
-    - This have been successfully working with gcc 4.2.1
-    that comes with Xcode 4.1 under Mac OSX Lion (10.7.2)
-- Check your version of gcc using `gcc-4.2 -v`
+- This has been successfully working with :
+    - gcc 4.2.1 - Xcode 4.1 - Mac OSX Lion (10.7.2)
+    - llvm-gcc 4.2.1 - Xcode 4.3.1 (With Command line utilities) - Mac OSX Lion (10.7.3)
+- Check your version of gcc using `gcc -v`
 
 ## 2. GTK-OSX [jhbuild][1] environment
 
@@ -103,6 +103,9 @@ log by uncommenting the end of script `Deluge.app/Contents/MacOS/Deluge`
         - libtorrent 0.15.8 > 0.15.9
         - Several python dependencies
         - jhbuild environment
+
+- **v1.3.4-1**:
+    - Updated to v1.3.4
 
 ## TODO
 
