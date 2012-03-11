@@ -76,6 +76,13 @@ Quick how-to *(from the full [GTK-OSX building][2] instructions)*
 
 You *should* have now a working Deluge.app
 
+i386 Notes:
+    - Uncomment the relevant sections of jhbuildrc-custom and deluge.modules
+    - deluge egg has to be named without the -macosx-10.6-intel suffix
+    - python setup.py py2app --arch=i386 *might* help
+    - To build for i386 under a x64 arch libtorrent python bindings have to be
+      patched manually to set correct arch see macports package patch
+
 ## Issues
 
 If Deluge.app doesn't work or crash the first thing to do is to check OSX
@@ -84,7 +91,7 @@ log by uncommenting the end of script `Deluge.app/Contents/MacOS/Deluge`
 
 ### Known issues
 
-- **WebUI**: Does not work, plugin fails silently
+- **i386**: libtorrent crash
 - **i18n**: English only for now
 
 ## Changelog
