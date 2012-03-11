@@ -106,6 +106,8 @@ log by uncommenting the end of script `Deluge.app/Contents/MacOS/Deluge`
 
 - **v1.3.4-1**:
     - Updated to v1.3.4
+    - Updated libs:
+        - libtorrent 0.15.9 > 0.15.10
 
 ## TODO
 

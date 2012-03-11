@@ -20,9 +20,9 @@
     <autotools id="libtorrent" autogen-sh="configure"
         autogen-template="%(srcdir)s/%(autogen-sh)s --prefix=%(prefix)s --with-boost-libdir=%(libdir)s --with-openssl=%(prefix)s %(autogenargs)s"
         autogenargs="--enable-python-binding CPPFLAGS='-DBOOST_FILESYSTEM_VERSION=2' --with-boost-thread=boost_thread">
-        <branch repo="libtorrent" version="0.15.9"
-            module="libtorrent-rasterbar-0.15.9.tar.gz"
-            hash="sha1:d86eb9d4452d07715a355d3a67312f162d6eff3a"/>
+        <branch repo="libtorrent" version="0.15.10"
+            module="libtorrent-rasterbar-0.15.10.tar.gz"
+            hash="sha1:3e461d9ede5fab3fb59be6a9f0cbc52121d536c4"/>
         <dependencies>
             <dep package="openssl"/>
             <dep package="boost"/>
