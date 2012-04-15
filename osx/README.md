@@ -118,6 +118,9 @@ log by uncommenting the end of script `Deluge.app/Contents/MacOS/Deluge`
         - boost 1.47 > 1.49
         - openssl 1.0.0e > 1.0.0g
 
+- **v1.3.5-1**:
+    - Updated to v1.3.5
+
 ## TODO
 
 by order of priority/feasability:
