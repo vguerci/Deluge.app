@@ -553,7 +553,7 @@ if osx_check():
 # Main setup
 setup(
     name = "deluge",
-    version = "1.3.4",
+    version = "1.3.5",
     fullname = "Deluge Bittorrent Client",
     description = "Bittorrent Client",
     author = "Andrew Resch, Damien Churchill",

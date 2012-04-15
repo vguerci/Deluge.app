@@ -108,7 +108,7 @@ class LabelSidebarMenu(object):
             for item in self.items:
                 item.show()
             #default items
-            sensitive = ((label not in (NO_LABEL, None, "")) and (cat != "cat"))
+            sensitive = ((label not in (NO_LABEL, None, "", "All")) and (cat != "cat"))
             for item  in self.items:
                 item.set_sensitive(sensitive)
 
@@ -185,7 +185,7 @@ class OptionsDialog(object):
         })
 
         # Show the label name in the header label
-        self.glade.get_widget("label_header").set_markup("<b>Label Options:</b> %s" % self.label)
+        self.glade.get_widget("label_header").set_markup("<b>%s:</b> %s" % (_("Label Options"), self.label))
 
         for chk_id, group in  self.sensitive_groups:
             chk = self.glade.get_widget(chk_id)
