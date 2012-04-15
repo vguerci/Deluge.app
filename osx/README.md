@@ -120,6 +120,7 @@ log by uncommenting the end of script `Deluge.app/Contents/MacOS/Deluge`
 
 - **v1.3.5-1**:
     - Updated to v1.3.5
+    - Included: twisted.internet.utils, email.mime
 
 ## TODO
 
