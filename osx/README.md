@@ -38,14 +38,15 @@ Quick how-to *(from the full [GTK-OSX building][2] instructions)*
 
         jhbuild bootstrap && jhbuild
 
-    - *Note*: If you encounter an error while building `glib` like:
 
-            gconvert.c:65:2: error: #error GNU libiconv not in use but included iconv.h is from libiconv
+    *Note*: If you encounter an error while building `glib` like:
 
-        Start a shell from jhbuild (#4), edit the file `vim glib/gconvert.c +65`
-        to delete the section raising error, which is irrelevant. *(Lion
-        iconv.h looks like gnu one, but it is not)*
-        Then exit the shell and resume build (#1)
+        gconvert.c:65:2: error: #error GNU libiconv not in use but included iconv.h is from libiconv
+
+    Start a shell from jhbuild (#4), edit the file `vim glib/gconvert.c +65`
+    to delete the section raising error, which is irrelevant. *(Lion
+    iconv.h looks like gnu one, but it is not)*
+    Then exit the shell and resume build (#1)
 
 5. Build the deluge moduleset: *(takes a while...)*
 
@@ -77,11 +78,14 @@ Quick how-to *(from the full [GTK-OSX building][2] instructions)*
 You *should* have now a working Deluge.app
 
 i386 Notes:
-    - Uncomment the relevant sections of jhbuildrc-custom and deluge.modules
-    - deluge egg has to be named without the -macosx-10.6-intel suffix
-    - python setup.py py2app --arch=i386 *might* help
-    - To build for i386 under a x64 arch libtorrent python bindings have to be
-      patched manually to set correct arch see macports package patch
+
+- Uncomment the relevant sections of :
+    - jhbuildrc-custom
+    - deluge.modules
+    - setup.cfg
+- deluge egg has to be named without the -macosx-10.6-intel suffix
+- To build for i386 under a x64 arch libtorrent python bindings have to be
+  patched manually to set correct arch see macports package patch
 
 ## Issues
 
@@ -89,10 +93,15 @@ If Deluge.app doesn't work or crash the first thing to do is to check OSX
 Console for logs and/or crash reports. Alternatively, you can enable python
 log by uncommenting the end of script `Deluge.app/Contents/MacOS/Deluge`
 
-### Known issues
+Recent jhbuild issues:
 
-- **i386**: libtorrent crash
-- **i18n**: English only for now
+- Some jhbuild modules fails to build, freetype and
+  gtk-mac-integration, strangely configure is not called before
+  build/install.
+- If that happens, just force rebuild with something like:
+
+        jhbuild build -cf gtk-mac-integration-python
+-  Interrupt while building with ctrl-C and wipe to start over if configure missing
 
 ## Changelog
 
@@ -122,9 +131,17 @@ log by uncommenting the end of script `Deluge.app/Contents/MacOS/Deluge`
     - Updated to v1.3.5
     - Included: twisted.internet.utils, email.mime
 
+### Known issues
+
+- **i386**: libtorrent crash
+- **i18n**: English only for now
+- **Magnet URLs**: Not currently supported by GTK-OSX
+
 ## TODO
 
 by order of priority/feasability:
+
+- **OSX Open file limit**: max 256 *(setrlimit call)*
 
 - **Notifications**: Growl
 
