@@ -30,6 +30,8 @@
 	<string>10.6</string>
 	<key>LSUIElement</key>
 	<string>0</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
 	<key>CFBundleDisplayName</key>
 	<string>Deluge</string>
 	<key>CFBundleDocumentTypes</key>
